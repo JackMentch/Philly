@@ -2,32 +2,34 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup, Comment
 import re
 
-# player name should be inserted in the format: <firstname lastname>
-# example is player_name = "Bryce Harper"
+# player name should be inserted in the format: <lastname, firstname>
+# example is player_name = "Harper, Bryce"
 # current year should be entered as an int in the format: <XXXX>
 # example is current_year = 2016
 
 def get_stats_from_name(player_name, current_year):
 
-
+    # finds the http link to the baseball-reference page for the given player
     link = get_player_page(find_player_name=player_name, current_year=current_year)
+    
+    # returns a player's stats in JSON format
     return extract_data_from_link(link = link, current_year=current_year)
 
-
+ # function finds the http link to the baseball-reference page for the given player
 def get_player_page(find_player_name, current_year):
 
-
+    # get the first letter of the player's last name
     first_letter_last_name = find_player_name.split(", ")[0][0].lower()
 
     # baseball references sorts players by the first letter of their last name
     # the link below returns a html file of all MLB players that have a last name beginning with a specified letter
     link = f"https://www.baseball-reference.com/players/{first_letter_last_name}"
-
+    
+    # intstantiate a BeautifulSoup Object with the player's web page
     html = urlopen(link)
     bsObj = BeautifulSoup(html.read(),features="lxml")
 
-    # we will extract the html file as a list of <p> tags that contain a player's name, service time, and a link to their
-    # specific baseball-reference page
+    # we will extract the html file as a list of <p> tags that contains all the players listed on the webpage
     list_of_players = bsObj.find("div",{"id":"div_players_"}).findAll("p")
 
 
@@ -42,7 +44,6 @@ def get_player_page(find_player_name, current_year):
         player_name, service_time = player.get_text().replace("+"," ").split("  ")
 
         # reformat player_name so it matches the structure of our input find_player_name <lastname, firstname>
-
         player_name = player_name.split(" ")
 
         # some players don't have last names so dont do anything
@@ -66,13 +67,14 @@ def get_player_page(find_player_name, current_year):
     return None
 
 
-
+# this function takes in a link to a player's baseball-reference website, parses the HTML, and returns the desired stats in JSON format
 def extract_data_from_link(link, current_year):
 
     # if no link is given just return None
     if not link:
         return None
 
+    # instantiate a BeautifulSoup object to parse the link
     html = urlopen(link)
     bsObj = BeautifulSoup(html.read(),features="lxml")
 
@@ -92,7 +94,7 @@ def extract_data_from_link(link, current_year):
     player_position = re.split(',|and',player_position)
 
 
-    # baseball-reference.com stores data like WAR and Salary in HTML that is commented out when you look at the source code.
+    # baseball-reference.com stores data like WAR and Salary in HTML that is commented out.
     # To retrieve the data, I had to find all the comments, convert it to a string, then convert to a BeautifulSoup Object
     # from there I can run BS commands to find the tags/data I wanted.
     comments = bsObj.findAll(string=lambda text: isinstance(text, Comment))
