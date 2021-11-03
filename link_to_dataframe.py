@@ -53,26 +53,33 @@ def check_salary_disparity(player_name, player_year, player_original_salary):
 
     return False
 
+# function takes in the link to the dataset and compiles the data into a dataframe
 def link_to_dataframe(link, fill_in_missing_data, check_for_data_disparity):
 
+    # instantiates a BeautifulSoup Object
     html = urlopen(link)
     bsObj = BeautifulSoup(html.read(),features="lxml")
 
+    # data is found withing <tr> tags, so filter them into a list
     html_to_list = bsObj.findAll("tr")
 
+    # variables to track the progress of the function
     total_players = len(html_to_list)
     current_player = 0
 
+    # instantiate a pandas dataframe
     df = pd.DataFrame(columns = ['Name', 'Salary', 'Year', 'Level'])
 
     for player in html_to_list:
         current_player += 1
 
+        # gets the text data out of the html <td> tags
         player_name = player.find("td",{"class":"player-name"}).get_text()
         player_salary = player.find("td",{"class":"player-salary"}).get_text()
         player_year = player.find("td",{"class":"player-year"}).get_text()
         player_level = player.find("td",{"class":"player-level"}).get_text()
 
+        # filter out all non-numeric characters in the player_salary
         player_salary = re.sub("[^0-9]", "", player_salary)
 
         player_salary = string_to_int(player_salary)
