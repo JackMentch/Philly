@@ -66,7 +66,8 @@ def get_player_page(find_player_name, current_year):
     return None
 
 
-
+# input a baseball-reference.com link for a player and this function scrapes the site and
+# returns the data in JSON format.
 def extract_data_from_link(link, current_year):
 
     # if no link is given just return None
