@@ -1,7 +1,17 @@
+<!-- SETUP -->
+## SETUP
+
+Thank you for visiting my repo. To ensure you have the proper packages, pip install the packages in the requirements.txt
+
+  ```sh
+  python3 -m pip install -r requirements.txt
+  ```
+
+
 <!-- GETTING STARTED -->
 ## Getting Started
 
-Thank you for checking out my submission! In this repo you will find 5 seperate python files:
+In this repo you will find 5 seperate python files:
 
 - main.py
 - plotter.py
