@@ -1,10 +1,12 @@
 <!-- SETUP -->
 ## SETUP
 
-Thank you for visiting my repo. To ensure you have the proper packages, pip install the packages in the requirements.txt
+Thank you for visiting my repo. To ensure you have the proper packages run the following commands to 
+set up a virtual environment.
 
   ```sh
-  python3 -m pip install -r requirements.txt
+  conda env create -f environment.yml
+  conda activate qualoffer
   ```
 
 
