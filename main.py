@@ -1,5 +1,4 @@
 from link_to_dataframe import link_to_dataframe
-from get_player_data import get_stats_from_name
 from plotter import *
 from dataframe_functions import *
 
